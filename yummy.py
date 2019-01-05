@@ -1,12 +1,13 @@
+from importlib.abc import Loader, MetaPathFinder
+from importlib.util import spec_from_loader
 from io import BytesIO
 import os
 import random
 import sys
+import webbrowser
 
 import fabulous.image
 import fabulous.utils
-from importlib.abc import Loader, MetaPathFinder
-from importlib.util import spec_from_loader
 import requests
 
 from dotenv import load_dotenv
@@ -27,6 +28,8 @@ def fetch_recipe(keywords):
     }
     r = requests.get(EDAMAM_ENDPOINT, params=params)
     results = r.json()
+    if not results['hits']:
+        return None
     return random.choice(results['hits'])['recipe']
 
 
@@ -43,10 +46,15 @@ def print_recipe_image(recipe):
     print(fabulous.image.Image(BytesIO(r.content), width=fabulous.utils.term.width // 3))
 
 
+def dict_to_attributes(dictionary, obj):
+    for k, v in dictionary.items():
+        setattr(obj, k, v)
+
+
 # Code for meta finder and loader based on https://stackoverflow.com/a/43573798/25507
 
 class YummyMetaFinder(MetaPathFinder):
-    BLACKLIST = ['nt']
+    BLACKLIST = ['jedi.parser', 'nt']
 
     def find_spec(self, fullname, path, target=None):
         if fullname in self.BLACKLIST:
@@ -64,10 +72,15 @@ class YummyLoader(Loader):
         return None  # use default module creation semantics
 
     def exec_module(self, module):
-        print("yum, %s..." % self.filename)
-        recipe = fetch_recipe(self.filename.split('_'))
+        keywords = self.filename.split('_')
+        print("yum, %s..." % ' '.join(keywords))
+        recipe = fetch_recipe(keywords)
+        if not recipe:
+            return
         print_recipe_text(recipe)
         print_recipe_image(recipe)
+        dict_to_attributes(recipe, module)
+        module.open = lambda: webbrowser.open(recipe['url'])
 
 
 def install():
