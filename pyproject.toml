@@ -12,6 +12,8 @@ fabulous = "^0.3.0"
 
 [tool.poetry.dev-dependencies]
 ipython = "^7.2"
+flake8 = "^3.6"
+pep8-naming = "^0.7.0"
 
 [build-system]
 requires = ["poetry>=0.12"]

@@ -1,4 +1,4 @@
 {
-    "python.pythonPath": "/usr/local/bin/python3",
+    "python.pythonPath": "~/.virtualenvs/yummy/bin/python",
     "python.linting.pylintEnabled": false
 }
