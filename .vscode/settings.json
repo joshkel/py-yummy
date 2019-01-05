@@ -1,4 +1,10 @@
 {
     "python.pythonPath": "~/.virtualenvs/yummy/bin/python",
-    "python.linting.pylintEnabled": false
+    "python.linting.pylintEnabled": false,
+    "cSpell.words": [
+        "EDAMAM",
+        "dotenv",
+        "getcwd",
+        "getenv"
+    ]
 }
