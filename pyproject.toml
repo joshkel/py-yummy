@@ -10,7 +10,7 @@ python = "^3.5"
 requests = "^2.21"
 fabulous = "^0.3.0"
 python-dotenv = "^0.10.1"
-Pillow = "^5.4"
+Pillow = "^6.2"
 cffi = "^1.11"
 
 [tool.poetry.dev-dependencies]
